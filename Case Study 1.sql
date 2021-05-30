@@ -59,7 +59,6 @@ VALUES
   on s.product_id = m.product_id
   group by s.customer_id;
 
---!!!
 --2. Number of days each customer has visited the restaurant
 drop table if exists #daysCount
 create table #dayscount
@@ -107,10 +106,7 @@ order by s.customer_id;
 select Customer, Product, order_rank from #mostPop
 where order_rank = 1;
 
-
---!!!!
 --6. Which item was purchased first by the customer after they became a member?
-
 With DataRank as
 (
 Select sales.customer_id CusID, sales.order_date, menu.product_name Prod, members.join_date, rank() over (partition by sales.customer_id ORDER BY  max(order_date) desc) AS [order_rank] from sales
@@ -125,8 +121,6 @@ select cusID, Prod, [order_rank] from DataRank
 where [order_rank] = 1
 order by order_rank;
 
-
---!!!
 --7.Which item was purchased just before the customer became a member?
 drop table if exists #LastPurchase
 Create Table #LastPurchase
@@ -158,7 +152,6 @@ where ranks = 1
 
 
 
---!!!
 --8. What is the total items and amount spent for each member before they became a member?
 drop table if exists #SpentB4Joining
 Create Table #SpentB4Joining
@@ -198,7 +191,7 @@ group by sales.customer_id, menu.product_name
 select cus, sum(amt_spent*dollar_worth) as Total_Points from cte
 group by cus;
 
-!!
+
 --10. In the first week after a customer joins the program (including their join date) they earn 2x points on all items, not just sushi - how many points do customer A and B have at the end of January?
 With AllPoints as 
 (
